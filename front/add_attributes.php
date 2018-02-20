@@ -43,10 +43,26 @@ function gda_add_attributes() {
 					$value = get_the_author_meta( 'ID' );
 					break;
 				case 'pageCategories':
-					$value = get_the_category();
+					$categories = get_the_category();
+					$category_data = array();
+					foreach ( $categories as $category ) {
+						$category_data[] = array(
+							'id' => $category->term_id,
+							'name' => $category->name,
+						);
+					}
+					$value = $category_data;
 					break;
 				case 'pageTags':
-					$value = get_the_tags();
+					$tags = get_the_tags();
+					$tag_data = array();
+					foreach ( $tags as $tag ) {
+						$tag_data[] = array(
+							'id' => $tag->term_id,
+							'name' => $tag->name,
+						);
+					}
+					$value = $tag_data;
 					break;
 				case 'isLoggedIn':
 					$value = ( is_user_logged_in() ) ? 'True' : 'False' ;
