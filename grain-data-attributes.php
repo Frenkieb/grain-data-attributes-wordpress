@@ -30,8 +30,8 @@ require_once( 'front/add_attributes.php' );
 
 // We need Bootstrap for our plugin, so we require it in this function
 function bootstrap_jquery_scripts() {
-	wp_enqueue_style( 'grain_data_attributes_bootstrap_css', GRAIN_DATA_ATTRIBUTES_URL . '/admin/assets/vendors/bootstrap/bootstrap.min.css', false );
-    wp_enqueue_script( 'grain_data_attributes_bootstrap_js', GRAIN_DATA_ATTRIBUTES_URL . '/admin/assets/vendors/bootstrap/bootstrap.min.js', false );
+    // wp_enqueue_style( 'grain_data_attributes_bootstrap_css', GRAIN_DATA_ATTRIBUTES_URL . '/admin/assets/vendors/bootstrap/bootstrap.min.css', false );
+    // wp_enqueue_script( 'grain_data_attributes_bootstrap_js', GRAIN_DATA_ATTRIBUTES_URL . '/admin/assets/vendors/bootstrap/bootstrap.min.js', false );
 }
 add_action( 'admin_enqueue_scripts', 'bootstrap_jquery_scripts' );
 
