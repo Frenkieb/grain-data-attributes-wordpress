@@ -55,14 +55,18 @@ function gda_add_attributes() {
 					break;
 				case 'pageTags':
 					$tags = get_the_tags();
-					$tag_data = array();
-					foreach ( $tags as $tag ) {
-						$tag_data[] = array(
-							'id' => $tag->term_id,
-							'name' => $tag->name,
-						);
+					if ( $tags ) {
+						$tag_data = array();
+						foreach ( $tags as $tag ) {
+							$tag_data[] = array(
+								'id' => $tag->term_id,
+								'name' => $tag->name,
+							);
+						}
+						$value = $tag_data;
+					} else {
+						$value = '';
 					}
-					$value = $tag_data;
 					break;
 				case 'isLoggedIn':
 					$value = ( is_user_logged_in() ) ? 'True' : 'False' ;
