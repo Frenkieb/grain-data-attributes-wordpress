@@ -23,65 +23,72 @@ function gda_add_attributes() {
 	}
 
 	$current_user = wp_get_current_user();
+	foreach ( $pageVariableOptions as $key => $options ) {
+		foreach ( $options as $option ) {
+			if ( $grain_data_attributes_page_variables[$key][$option] ) {
+				// Only add this when on a single.
+				if ( is_single() ) {
+					switch( $option ) {
+						case 'pageTitle':
+							$data_track_page[$option] = get_the_title();
+							break;
+						case 'pagePublishDate':
+							$data_track_page[$option] = get_the_date('c');
+							break;
+						case 'pageID':
+							$data_track_page[$option] = get_the_ID();
+							break;
+						case 'pagePostType':
+							$data_track_page[$option] = get_post_type();
+							break;
+						case 'pageAuthorID':
+							$data_track_page[$option] = get_the_author_meta( 'ID' );
+							break;
+						case 'pageCategories':
+							$categories = get_the_category();
+							$category_data = array();
+							foreach ( $categories as $category ) {
+								$category_data[] = array(
+									'id' => $category->term_id,
+									'name' => $category->name,
+								);
+							}
+							$data_track_page[$option] = $category_data;
+							break;
+						case 'pageTags':
+							$tags = get_the_tags();
+							if ( $tags ) {
+								$tag_data = array();
+								foreach ( $tags as $tag ) {
+									$tag_data[] = array(
+										'id' => $tag->term_id,
+										'name' => $tag->name,
+									);
+								}
+								$data_track_page[$option] = $tag_data;
+							} else {
+								$data_track_page[$option] = '';
+							}
+							break;
+					}
+				}
 
-	foreach ( $pageVariableOptions as &$key ) {
-		if ( $grain_data_attributes_page_variables[$key] === "on" ) {
-			switch( $key ) {
-				case 'pageTitle':
-					$value = get_the_title();
+				// Always add these.
+				switch( $option ) {
+					case 'isLoggedIn':
+						$data_track_page[$option] = ( is_user_logged_in() ) ? '1' : '0' ;
+						break;
+					case 'userRole':
+						$data_track_page[$option] = ( is_user_logged_in() ) ?  $current_user->roles[0] : '';
+						break;
+					case 'email':
+						$data_track_page[$option] = ( is_user_logged_in() ) ? $current_user->user_email : '';
+						break;
+					case 'wordPressUserID':
+						$data_track_page[$option] = ( is_user_logged_in() ) ? $current_user->ID : '';
 					break;
-				case 'pagePublishDate':
-					$value = get_the_date('c');
-					break;
-				case 'pageID':
-					$value = get_the_ID();
-					break;
-				case 'pagePostType':
-					$value = get_post_type();
-					break;
-				case 'pageAuthorID':
-					$value = get_the_author_meta( 'ID' );
-					break;
-				case 'pageCategories':
-					$categories = get_the_category();
-					$category_data = array();
-					foreach ( $categories as $category ) {
-						$category_data[] = array(
-							'id' => $category->term_id,
-							'name' => $category->name,
-						);
-					}
-					$value = $category_data;
-					break;
-				case 'pageTags':
-					$tags = get_the_tags();
-					if ( $tags ) {
-						$tag_data = array();
-						foreach ( $tags as $tag ) {
-							$tag_data[] = array(
-								'id' => $tag->term_id,
-								'name' => $tag->name,
-							);
-						}
-						$value = $tag_data;
-					} else {
-						$value = '';
-					}
-					break;
-				case 'isLoggedIn':
-					$value = ( is_user_logged_in() ) ? 'True' : 'False' ;
-					break;
-				case 'userRole':
-					$value = ( is_user_logged_in() ) ?  $current_user->roles[0] : '';
-					break;
-				case 'email':
-					$value = ( is_user_logged_in() ) ? $current_user->user_email : '';
-					break;
-				case 'wordPressUserID':
-					$value = ( is_user_logged_in() ) ? $current_user->ID : '';
-				break;
+				}
 			}
-			$data_track_page[$key] = isset( $value ) ? $value : "";
 		}
 	}
 
