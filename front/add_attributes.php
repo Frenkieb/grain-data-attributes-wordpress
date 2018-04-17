@@ -29,43 +29,49 @@ function gda_add_attributes() {
 				// Only add this when on a single.
 				if ( is_single() ) {
 					switch( $option ) {
-						case 'pageTitle':
-							$data_track_page[$option] = get_the_title();
-							break;
-						case 'pagePublishDate':
+						case 'postPublishDate':
 							$data_track_page[$option] = get_the_date('c');
 							break;
-						case 'pageID':
+						case 'postID':
 							$data_track_page[$option] = get_the_ID();
 							break;
-						case 'pagePostType':
-							$data_track_page[$option] = get_post_type();
-							break;
-						case 'pageAuthorID':
+						case 'postAuthorID':
 							$data_track_page[$option] = get_the_author_meta( 'ID' );
 							break;
-						case 'pageCategories':
+						case 'postCategories':
 							$categories = get_the_category();
 							$category_data = array();
+							$category_data_ids = array();
+							$category_data_names = array();
 							foreach ( $categories as $category ) {
 								$category_data[] = array(
 									'id' => $category->term_id,
 									'name' => $category->name,
 								);
+								$category_data_ids[] = $category->term_id;
+								$category_data_names[] = $category->name;
 							}
 							$data_track_page[$option] = $category_data;
+							$data_track_page['postCategoriesIDs'] = $category_data_ids;
+							$data_track_page['postCategoriesNames'] = $category_data_names;
 							break;
-						case 'pageTags':
+						case 'postTags':
 							$tags = get_the_tags();
 							if ( $tags ) {
 								$tag_data = array();
+								$tag_data_ids = array();
+								$tag_data_names = array();
 								foreach ( $tags as $tag ) {
 									$tag_data[] = array(
 										'id' => $tag->term_id,
 										'name' => $tag->name,
 									);
+									$tag_data_ids[] = $tag->term_id;
+									$tag_data_names[] = $tag->name;
 								}
 								$data_track_page[$option] = $tag_data;
+								$data_track_page['postTagsIDs'] = $tag_data_ids;
+								$data_track_page['postTagsNames'] = $tag_data_names;
 							} else {
 								$data_track_page[$option] = '';
 							}

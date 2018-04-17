@@ -11,13 +11,11 @@ define ( 'GRAIN_DATA_ATTRIBUTES_PAGE_VARIABLES_CONFIG',  serialize(
 		array(
 			'post' =>
 				array(
-					'pageTitle',
-					'pagePublishDate',
-					'pageCategories',
-					'pageTags',
-					'pageAuthorID',
-					'pageID',
-					'pagePostType',
+					'postPublishDate',
+					'postCategories',
+					'postTags',
+					'postAuthorID',
+					'postID',
 			),
 			'user' =>
 				array(
