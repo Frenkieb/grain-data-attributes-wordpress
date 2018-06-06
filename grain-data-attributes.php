@@ -2,6 +2,8 @@
 
 /*
 Plugin Name: Grain Data Attributes
+Version: 1.0.1
+Description: This plug-in adds the data-attributes for the Grain Data Tracking Framework using Google Tag Manager.
 */
 
 // Set some global variables
