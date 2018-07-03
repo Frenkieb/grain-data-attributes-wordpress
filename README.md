@@ -1,3 +1,3 @@
-## Version
+## Changelog
 
-1.0.0 Started version numbering. Added exclusion of paths.
+1.1.0 Started the changelog. Added exclusion of paths.
