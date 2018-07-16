@@ -5,6 +5,8 @@
 
 $gtm_id 						= get_option( 'grain_data_gtm_id', '' );
 $gd_excluded_paths				= get_option( 'grain_data_excluded_paths', '' );
+$gd_excluded_head				= get_option( 'grain_data_excluded_head', '' );
+$gd_excluded_head_content		= get_option( 'grain_data_excluded_head_content', '' );
 $gd_attributes_page_variables 	= get_option( 'grain_data_attributes_page_variables', array() );
 $pageVariableOptions 			= unserialize( GRAIN_DATA_ATTRIBUTES_PAGE_VARIABLES_CONFIG );
 ?>
@@ -57,9 +59,19 @@ $pageVariableOptions 			= unserialize( GRAIN_DATA_ATTRIBUTES_PAGE_VARIABLES_CONF
 				}
 				?>
 
-				<h3>Excluded paths</h3>
-				<input type="text" name="gd_excluded_paths" value="<?php echo $gd_excluded_paths; ?>" class="regular-text" />
-				<p class="description">Voeg hier paden toe die niet naar de cookie wall moeten leiden. Voeg deze toe komma gescheiden, begin met een slash, eindig zonder slash, geen spaties. Bijv. /pad/pad-pad/,/pad</p>
+				<div>
+					<h3>Excluded paths</h3>
+					<input type="text" name="gd_excluded_paths" value="<?php echo $gd_excluded_paths; ?>" class="regular-text" />
+					<p class="description">Voeg hier paden toe die niet naar de cookie wall moeten leiden. Voeg deze toe komma gescheiden, begin met een slash, eindig zonder slash, geen spaties. Bijv. /pad/pad-pad/,/pad</p>
+				</div>
+
+				<div>
+					<input type="checkbox" id="gd_excluded_head" name="gd_excluded_head" value="1" <?php echo checked( $gd_excluded_head, 1 ); ?>>
+					<label for="gd_excluded_head">In plaats hiervan druk dit af in &lt;head&gt;:</label>
+					<div>
+						<textarea name="gd_excluded_head_content" rows="10" cols="80" class="code"><?php echo $gd_excluded_head_content; ?></textarea>
+					</div>
+				</div>
 
 				<input class="button btn btn-success" name="save_page_variables" type="submit" value="Save" />
 			</form>

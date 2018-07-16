@@ -4,10 +4,30 @@
  */
 class GD_Attributes_Frontend {
 	function __construct() {
+		add_action( 'wp_head', array( $this, 'wp_head' ) );
 		add_action( 'wp_footer', array( $this, 'print_attributes' ) );
 	}
 
-	// Adds the variable dataTrackPageVariables to the current page source.
+	/**
+	 * wp_head filter
+	 */
+	public function wp_head() {
+		// Print something in the header or not on the excluded paths.
+		if ( $this->is_excluded_slug() ) {
+			$gd_excluded_head = get_option( 'grain_data_excluded_head', 0 );
+
+			if ( $gd_excluded_head ) {
+				$gd_excluded_head_content = get_option( 'grain_data_excluded_head_content', '' );
+				if ( $gd_excluded_head_content ) {
+					 echo $gd_excluded_head_content . "\r\n";
+				}
+			}
+		}
+	}
+
+	/**
+	 * Adds the variable dataTrackPageVariables to the current page source.
+	 */
 	public function print_attributes() {
 		$pageVariableOptions 			= unserialize( GRAIN_DATA_ATTRIBUTES_PAGE_VARIABLES_CONFIG );
 		$data_track_page 				= array();

@@ -1,9 +1,8 @@
 <?php
-
 /*
 Plugin Name: Grain Data Attributes
 Description: This plug-in adds the data-attributes for the Grain Data Tracking Framework using Google Tag Manager.
-Version: 1.1.0
+Version: 1.2.0
 */
 
 // Set some global variables
@@ -32,18 +31,6 @@ define ( 'GRAIN_DATA_ATTRIBUTES_PAGE_VARIABLES_CONFIG',  serialize(
 // Require files
 require_once( 'admin/save-plugin-options.php' );
 require_once( 'front/add_attributes.php' );
-
-// We need Bootstrap for our plugin, so we require it in this function
-function bootstrap_jquery_scripts() {
-	// wp_enqueue_style( 'grain_data_attributes_bootstrap_css', GRAIN_DATA_ATTRIBUTES_URL . '/admin/assets/vendors/bootstrap/bootstrap.min.css', false );
-	// wp_enqueue_script( 'grain_data_attributes_bootstrap_js', GRAIN_DATA_ATTRIBUTES_URL . '/admin/assets/vendors/bootstrap/bootstrap.min.js', false );
-}
-add_action( 'admin_enqueue_scripts', 'bootstrap_jquery_scripts' );
-
-// We also have additional scripts to use for our own functionality
-/*function grain_data_attributes_scripts() {
-}
-add_action( 'admin_enqueue_scripts', 'grain_data_attributes_scripts' );*/
 
 function add_admin_menu_page() {
 	// The menu page will only be showed when the user has the "manage_options" role. The show_grain_data_attributes_page function is called to show the page
