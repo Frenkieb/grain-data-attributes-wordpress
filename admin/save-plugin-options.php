@@ -29,7 +29,7 @@ if ( 'POST' === $_SERVER['REQUEST_METHOD'] ) {
 	if ( isset( $_POST['gd_excluded_head'] ) ) {
 		update_option( 'grain_data_excluded_head', 1 );
 	} else {
-		delete_option( 'grain_data_excluded_head' );
+		update_option( 'grain_data_excluded_head', 0 );
 	}
 
 	if ( isset( $_POST['gd_excluded_head_content'] ) ) {
