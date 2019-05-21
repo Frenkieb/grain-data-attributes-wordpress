@@ -2,7 +2,7 @@
 /**
  * Prints Google Tag Manager code.
  */
-class GD_Attributes_Frontend {
+class GD_Attributes_Frontend extends GD_Attributes {
 	function __construct() {
 		add_action( 'wp_head', array( $this, 'wp_head' ) );
 		add_action( 'wp_footer', array( $this, 'print_attributes' ) );
@@ -29,7 +29,6 @@ class GD_Attributes_Frontend {
 	 * Adds the variable dataTrackPageVariables to the current page source.
 	 */
 	public function print_attributes() {
-		$pageVariableOptions 			= unserialize( GRAIN_DATA_ATTRIBUTES_PAGE_VARIABLES_CONFIG );
 		$data_track_page 				= array();
 		$gtm_id 						= get_option( 'grain_data_gtm_id', '' );
 		$gd_attributes_page_variables 	= get_option( 'grain_data_attributes_page_variables', array() );
@@ -55,7 +54,9 @@ class GD_Attributes_Frontend {
 
 		$current_user = wp_get_current_user();
 
-		foreach ( $pageVariableOptions as $key => $options ) {
+		$page_variables_config = $this->get_page_variables_config();
+
+		foreach ( $page_variables_config as $key => $options ) {
 			foreach ( $options as $option ) {
 				if ( $gd_attributes_page_variables[$key][$option] ) {
 					// Only add this when on a single.
@@ -135,7 +136,7 @@ class GD_Attributes_Frontend {
 		if ( empty( $data_track_page ) ) {
 			$data_track_page = "{}";
 		} else {
-			$data_track_page = json_encode( $data_track_page );
+			$data_track_page = json_encode( $data_track_page, JSON_UNESCAPED_SLASHES );
 		}
 
 		$addDataTrackPage = "
@@ -178,6 +179,4 @@ class GD_Attributes_Frontend {
 		return false;
 	}
 }
-
-$gd_attributes_frontend = new GD_Attributes_Frontend();
 ?>
