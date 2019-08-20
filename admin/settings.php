@@ -8,7 +8,7 @@ $gd_excluded_paths				= get_option( 'grain_data_excluded_paths', '' );
 $gd_excluded_head				= get_option( 'grain_data_excluded_head', '' );
 $gd_excluded_head_content		= get_option( 'grain_data_excluded_head_content', '' );
 $gd_attributes_page_variables 	= get_option( 'grain_data_attributes_page_variables', array() );
-$pageVariableOptions 			= unserialize( GRAIN_DATA_ATTRIBUTES_PAGE_VARIABLES_CONFIG );
+$page_variables_config          = $this->get_page_variables_config();
 ?>
 <div class="container-fluid wrap">
 	<div class="row">
@@ -38,13 +38,10 @@ $pageVariableOptions 			= unserialize( GRAIN_DATA_ATTRIBUTES_PAGE_VARIABLES_CONF
 
 				<h3>Options</h3>
 
-				<?php
-				foreach ( $pageVariableOptions as $key => $options ) {
-				?>
-					<h3><?php echo esc_html( ucfirst( $key ) ); ?></h3>
-					<?php
-					foreach ( $options as $value ) {
-					?>
+				<?php foreach ( $page_variables_config as $key => $options ) { ?>
+					<?php if ( count( $options ) ) { ?>
+				<h3><?php echo esc_html( ucfirst( $key ) ); ?></h3>
+						<?php foreach ( $options as $value ) { ?>
 				<div class="form-check">
 					<input
 						type="checkbox"
@@ -54,10 +51,9 @@ $pageVariableOptions 			= unserialize( GRAIN_DATA_ATTRIBUTES_PAGE_VARIABLES_CONF
 						<?php echo ( isset( $gd_attributes_page_variables[$key][$value] ) && $gd_attributes_page_variables[$key][$value] ) ? 'checked="checked"' : '' ; ?> />
 					<label for="<?php echo $value ?>"><?php echo $value ?></label>
 				</div>
-				<?php
-					}
-				}
-				?>
+						<?php } ?>
+					<?php } ?>
+				<?php }	?>
 
 				<div>
 					<h3>Excluded paths</h3>
