@@ -1,5 +1,7 @@
 ## Changelog
 
+1.5.0 Added dataTrackContentView.
+
 1.4.0 / are not escaped anymore in the json output.
 
 1.3.0 Refactored the code by using OOP.

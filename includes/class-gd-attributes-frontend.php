@@ -30,6 +30,7 @@ class GD_Attributes_Frontend extends GD_Attributes {
 	 */
 	public function print_attributes() {
 		$data_track_page 				= array();
+		$data_track_content_view		= array();
 		$gtm_id 						= get_option( 'grain_data_gtm_id', '' );
 		$gd_attributes_page_variables 	= get_option( 'grain_data_attributes_page_variables', array() );
 
@@ -68,45 +69,31 @@ class GD_Attributes_Frontend extends GD_Attributes {
 							case 'postID':
 								$data_track_page[$option] = get_the_ID();
 								break;
-							case 'postAuthorID':
-								$data_track_page[$option] = get_the_author_meta( 'ID' );
-								break;
 							case 'postCategories':
 								$categories = get_the_category();
 								$category_data = array();
-								$category_data_ids = array();
-								$category_data_names = array();
+
 								foreach ( $categories as $category ) {
 									$category_data[] = array(
-										'id' => $category->term_id,
-										'name' => $category->name,
+										'type' => 'default',
+										'path' => $category->name,
 									);
-									$category_data_ids[] = $category->term_id;
 									$category_data_names[] = $category->name;
 								}
-								$data_track_page[$option] = $category_data;
-								$data_track_page['postCategoriesIDs'] = $category_data_ids;
-								$data_track_page['postCategoriesNames'] = $category_data_names;
+								$data_track_page['categories'] = $category_data;
 								break;
 							case 'postTags':
 								$tags = get_the_tags();
 								if ( $tags ) {
 									$tag_data = array();
-									$tag_data_ids = array();
-									$tag_data_names = array();
+
 									foreach ( $tags as $tag ) {
-										$tag_data[] = array(
-											'id' => $tag->term_id,
-											'name' => $tag->name,
-										);
-										$tag_data_ids[] = $tag->term_id;
-										$tag_data_names[] = $tag->name;
+										$tag_data[] = $tag->name;
 									}
-									$data_track_page[$option] = $tag_data;
-									$data_track_page['postTagsIDs'] = $tag_data_ids;
-									$data_track_page['postTagsNames'] = $tag_data_names;
+
+									$data_track_page['tags'] = $tag_data;
 								} else {
-									$data_track_page[$option] = '';
+									$data_track_page['tags'] = array();
 								}
 								break;
 						}
@@ -117,14 +104,9 @@ class GD_Attributes_Frontend extends GD_Attributes {
 						case 'isLoggedIn':
 							$data_track_page[$option] = ( is_user_logged_in() ) ? '1' : '0' ;
 							break;
-						case 'userRole':
-							$data_track_page[$option] = ( is_user_logged_in() ) ?  $current_user->roles[0] : '';
-							break;
 						case 'email':
 							$data_track_page[$option] = ( is_user_logged_in() ) ? $current_user->user_email : '';
 							break;
-						case 'wordPressUserID':
-							$data_track_page[$option] = ( is_user_logged_in() ) ? $current_user->ID : '';
 						break;
 					}
 				}
@@ -139,11 +121,68 @@ class GD_Attributes_Frontend extends GD_Attributes {
 			$data_track_page = json_encode( $data_track_page, JSON_UNESCAPED_SLASHES );
 		}
 
+		// Data Track Content View
+		if ( is_single() ) {
+			$data_track_content_view['contentInteraction'] =  'itemDetailView';
+
+			$cv_contents = array();
+			// Type
+			$cv_contents['type'] = 'post';
+
+			// Categories
+			$categories = get_the_category();
+			$category_data = array();
+
+			foreach ( $categories as $category ) {
+				$category_data[] = array(
+					'type' => 'default',
+					'path' => $category->name,
+				);
+				$category_data_names[] = $category->name;
+			}
+			$cv_contents['categories'] = $category_data;
+
+			// Tags
+			$tags = get_the_tags();
+			$tag_data = array();
+			if ( $tags ) {
+				foreach ( $tags as $tag ) {
+					$tag_data[] = $tag->name;
+				}
+			} else {
+				$tag_data = array();
+			}
+
+			$cv_contents['tags'] = $tag_data;
+
+			// Title
+			$cv_contents['name'] = get_the_title();
+
+			// Post ID
+			$cv_contents['id'] = get_the_ID();
+
+			// Publish data
+			$cv_contents['publishDate'] = get_the_date('c');
+
+			$data_track_content_view['contents'] = array( $cv_contents );
+		}
+		$data_track_content_view = apply_filters( 'customize_data_track_content_view', $data_track_content_view );
+
+		if ( empty( $data_track_content_view ) ) {
+			$data_track_content_view = "{}";
+		} else {
+			$data_track_content_view = json_encode( $data_track_content_view, JSON_UNESCAPED_SLASHES );
+		}
+
 		$addDataTrackPage = "
 			<script>
 				var body = document.querySelector(\"body\");
+
 				var dataTrackPageVariables = ". $data_track_page .";
 				body.setAttribute(\"data-track-page\", JSON.stringify(dataTrackPageVariables));
+
+				var dataTrackContentView = " . $data_track_content_view . ";
+				body.setAttribute(\"data-track-contentview\", JSON.stringify(dataTrackContentView));
 			</script>
 		";
 	   echo $addDataTrackPage;

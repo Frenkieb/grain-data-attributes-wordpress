@@ -6,13 +6,10 @@ class GD_Attributes {
 				'postPublishDate',
 				'postCategories',
 				'postTags',
-				'postAuthorID',
 				'postID',
 		),
 		'user' =>
 			array(
-				'userRole',
-				'wordPressUserID',
 				'email',
 				'isLoggedIn',
 			)
