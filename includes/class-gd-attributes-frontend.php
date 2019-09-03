@@ -166,6 +166,7 @@ class GD_Attributes_Frontend extends GD_Attributes {
 
 			$data_track_content_view['contents'] = array( $cv_contents );
 		}
+
 		$data_track_content_view = apply_filters( 'customize_data_track_content_view', $data_track_content_view );
 
 		if ( empty( $data_track_content_view ) ) {
@@ -179,13 +180,18 @@ class GD_Attributes_Frontend extends GD_Attributes {
 				var body = document.querySelector(\"body\");
 
 				var dataTrackPageVariables = ". $data_track_page .";
-				body.setAttribute(\"data-track-page\", JSON.stringify(dataTrackPageVariables));
+				body.setAttribute(\"data-track-page\", JSON.stringify(dataTrackPageVariables));";
 
+		if ( is_single() ) {
+			$addDataTrackPage .= "
 				var dataTrackContentView = " . $data_track_content_view . ";
-				body.setAttribute(\"data-track-contentview\", JSON.stringify(dataTrackContentView));
-			</script>
-		";
-	   echo $addDataTrackPage;
+				body.setAttribute(\"data-track-contentview\", JSON.stringify(dataTrackContentView));";
+		}
+
+		$addDataTrackPage .= "
+			</script>" . "\r\n";
+
+		echo $addDataTrackPage;
 	}
 
 	/**
