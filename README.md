@@ -1,5 +1,7 @@
 ## Changelog
 
+1.5.1 dataTrackContentView is only printed on a WP single.
+
 1.5.0 Added dataTrackContentView.
 
 1.4.0 / are not escaped anymore in the json output.
